@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    
+    <RelativeLayout
+        android:id="@+id/dialpad_bottom_rl"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/dial_close_rl"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+
+            <ImageView
+                android:id="@+id/dialpad_collapse_imageView"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_action_expand" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/dial_person_rl"
+            android:layout_width="60dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true" 
+            android:background="@drawable/call_details_selector">
+
+        <!--      <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" 
+                android:visibility="gone"/>-->
+
+           <ImageView
+               android:id="@+id/dialpad_person_imageView"
+               android:layout_width="30dp"
+               android:layout_height="30dp"
+               android:layout_centerHorizontal="true"
+               android:layout_centerVertical="true"
+               android:src="@drawable/ic_action_person" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/home_call_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@+id/dial_person_rl"
+            android:layout_toRightOf="@+id/dial_close_rl"
+            android:layout_centerVertical="true"
+            android:background="@drawable/layout_edge_shape" >
+
+            <ImageView
+                android:id="@+id/dialpad_call_imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:src="@android:drawable/ic_menu_call" />
+        </RelativeLayout>
+        
+    </RelativeLayout>
+    
+     <GridView
+         android:id="@+id/gridView1"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/dialpad_bottom_rl"
+         android:gravity="center"
+         android:numColumns="3">
+
+    </GridView>
+
+      <RelativeLayout
+          android:id="@+id/dial_num_edt_rl"
+          android:layout_width="fill_parent"
+          android:layout_height="40dp"
+          android:layout_above="@+id/gridView1"
+          android:layout_alignParentLeft="true"
+          android:layout_marginTop="5dp" >
+
+          <ImageView
+              android:id="@+id/backspace_imageView"
+              android:layout_width="30dp"
+              android:layout_height="30dp"
+              android:layout_alignParentRight="true"
+              android:layout_centerVertical="true"
+              android:layout_marginRight="16dp"
+              android:src="@drawable/ic_action_backspace" />
+
+          <EditText
+              android:id="@+id/dial_pad_num_editText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_alignParentBottom="true"
+              android:layout_alignParentLeft="true"
+              android:textSize="25dp"
+              android:hint="Enter number" 
+              android:layout_toLeftOf="@+id/backspace_imageView"
+              android:ems="10" 
+              android:layout_marginRight="5dp"
+              android:layout_marginLeft="10dp"
+              android:background="@null">
+
+              <requestFocus />
+          </EditText>
+
+      </RelativeLayout>
+      
+      
+      <ListView
+          android:id="@+id/listView_calldata"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentTop="true" 
+          android:layout_above="@+id/dial_num_edt_rl">
+      </ListView>
+
+</RelativeLayout>
