@@ -60,13 +60,26 @@ public class ContactCallHistoryActivity extends ActionBarActivity{
 	private void getContactHistory(String contactNumber) {
 		// TODO Auto-generated method stub
 		
+		String searchNum = null;
+		
 		historyArrayList = new ArrayList<CallHistoryData>();
+		
+//		if(contactNumber.startsWith("+91")){
+//			
+//			searchNum = contactNumber.substring(3);
+//			
+//		}if(contactNumber.startsWith("0")){
+//			
+//			searchNum = contactNumber.substring(1);
+//		}else{
+//			searchNum = contactNumber;
+//		}
 		
 		try{
 		
 			for(int i = 0; i < Common.calloglist.size(); i++){
 				
-				if(Common.calloglist.get(i).getCallnumber().contains(contactNumber)){
+				if(Common.calloglist.get(i).getCallnumber().contains(contactNumber) || Common.calloglist.get(i).getCallnumber() == contactNumber){
 					
 					//String cType, phNumber, conName, dateTime, duration, call_ID = null;
 					CallHistoryData historyCallData = new CallHistoryData();
@@ -173,7 +186,6 @@ public class ContactCallHistoryActivity extends ActionBarActivity{
 				 convertView.setTag(holder);
 			}
 
-			  
 			  final String callHistoryNumber = callListData.get(position).getCallnumber();
 			  //final String contactname = historyArrayList.get(position).getContactName();
 			  String callHistoryType = callListData.get(position).getCalltype();
@@ -192,7 +204,7 @@ public class ContactCallHistoryActivity extends ActionBarActivity{
 			  
 			  holder.callhistorynumber.setText(callHistoryNumber);
 			  holder.callhistorydate.setText(String.valueOf(callHistoryDate));
-			  holder.callhistoryduration.setText(callHistoryDuration+" sec");
+			  holder.callhistoryduration.setText(callHistoryDuration);
 			  
 			  holder.callHistoryOptions_iv.setOnClickListener(new OnClickListener() {
 				

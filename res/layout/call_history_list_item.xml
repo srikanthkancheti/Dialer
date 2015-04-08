@@ -4,6 +4,7 @@
     android:layout_height="match_parent" >
 
     <RelativeLayout
+        android:id="@+id/relativeLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -39,16 +40,6 @@
             android:text="Type"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
-        <TextView
-            android:id="@+id/call_history_duration_textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:layout_below="@+id/call_history_num_textView"
-            android:layout_toLeftOf="@+id/call_history_options_imageView"
-            android:text="duration"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
-
         <ImageView
             android:id="@+id/call_history_options_imageView"
             android:layout_width="wrap_content"
@@ -57,6 +48,15 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="18dp"
             android:src="@drawable/ic_action_overflow" />
+
+        <TextView
+            android:id="@+id/call_history_duration_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/call_history_dateTime_textView"
+            android:layout_below="@+id/call_history_dateTime_textView"
+            android:text="duration"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </RelativeLayout>
 

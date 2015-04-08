@@ -116,14 +116,24 @@
           </EditText>
 
       </RelativeLayout>
-      
+      <RelativeLayout 
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:layout_alignParentTop="true" 
+          android:layout_above="@+id/dial_num_edt_rl">
+          
+          <View 
+                android:layout_width="fill_parent"
+                android:layout_height="5dp"
+                android:background="@drawable/gradient_top" />
       
       <ListView
           android:id="@+id/listView_calldata"
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_alignParentTop="true" 
-          android:layout_above="@+id/dial_num_edt_rl">
+          android:layout_height="wrap_content">
       </ListView>
+      
+     
+      </RelativeLayout>
 
 </RelativeLayout>

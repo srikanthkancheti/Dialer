@@ -419,7 +419,7 @@ public class MainActivity extends Activity implements SwipeActionAdapter.SwipeAc
 		            callDateTime = format1.format(new Date(seconds));
 		              
 		            callDuration = managedCursor.getString(duration);
-		              
+		            String convertedDuration = convertCallDuration(callDuration);  
 		            String cType = null;
 		              
 		            int cTypeCode = Integer.parseInt(callType);
@@ -439,7 +439,7 @@ public class MainActivity extends Activity implements SwipeActionAdapter.SwipeAc
 		                   break;
 		                }
 		              
-		            CallData calldata=new CallData(cType, phoneNumber, contactName, callDateTime, callDuration, call_id);
+		            CallData calldata=new CallData(cType, phoneNumber, contactName, callDateTime, convertedDuration, call_id);
 		            Common.calloglist.add(calldata);
 		            
 		            
@@ -452,6 +452,49 @@ public class MainActivity extends Activity implements SwipeActionAdapter.SwipeAc
 	        
 	    }
 	 
+	private String convertCallDuration(String callDuration2) {
+		// TODO Auto-generated method stub
+		/**
+		* First consider the following values:
+		* 1 Minute = 60 Seconds
+		* 1 Hour = 3600 Seconds ( 60 * 60 )
+		* 1 Day = 86400 Second ( 24 * 3600 )
+		*/
+		int numberOfDays, numberOfHours = 0, numberOfMinutes = 0, numberOfSeconds = 0;
+		String convertedDuration = null;
+		
+
+			try {
+				numberOfDays = Integer.parseInt(callDuration2) / 86400;
+				numberOfHours = (Integer.parseInt(callDuration2) % 86400 ) / 3600;
+				numberOfMinutes = ((Integer.parseInt(callDuration2) % 86400 ) % 3600 ) / 60;
+				numberOfSeconds = ((Integer.parseInt(callDuration2) % 86400 ) % 3600 ) % 60;
+			
+				} catch(NumberFormatException nfe) {
+					   System.out.println("Could not parse " + nfe);
+				}
+				 
+		if(numberOfSeconds != 0){
+			
+			convertedDuration = numberOfSeconds + " sec";
+			
+			if(numberOfMinutes != 0){
+				
+				convertedDuration = numberOfMinutes + " mins " + numberOfSeconds + " sec";
+				
+				if(numberOfHours != 0){
+					
+					convertedDuration = numberOfHours + " hrs " + numberOfMinutes + " mins " + numberOfSeconds + " sec";
+				}
+			}
+		
+		}else{
+			convertedDuration = 0+"sec";
+		}
+		return convertedDuration;
+	}
+
+
 	/**
 	  * this method is used to get the contact name by its phone number
 	  * @param phoneNumber2

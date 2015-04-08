@@ -88,16 +88,18 @@ public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scroll
 	public void filter(String charText ) {
 		// TODO Auto-generated method stub
 		charText = charText.toLowerCase(Locale.getDefault());
+		//charText = charText.replace(" ", "");
 		items.clear();
         if (charText.length() == 0) {
         	items.addAll(arraylist);
         } 
-        else 
-        {
-            for (ContactBean ob : arraylist) 
-            {
-                if (ob.getName().toLowerCase(Locale.getDefault()).contains(charText)) 
-                {
+        else {
+        	
+            for (ContactBean ob : arraylist){
+            	
+                if (ob.getName().toLowerCase(Locale.getDefault()).contains(charText) 
+                		|| ob.getPhoneNo().toLowerCase(Locale.getDefault()).contains(charText)){
+                	
                 	items.add(ob);
                 }
             }
