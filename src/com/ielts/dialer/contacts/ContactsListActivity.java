@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.andraskindler.quickscroll.QuickScroll;
 import com.ielts.dialer.R;
+import com.ielts.dialer.adapters.ContanctAdapter;
 
 public class ContactsListActivity extends ActionBarActivity {
 	

@@ -16,7 +16,7 @@ public class SwipeDirections {
     public static final int DIRECTION_FAR_RIGHT = 2;
     public static final int DIRECTION_NEUTRAL = 0;
 
-    static List<Integer> getAllDirections(){
+    public static List<Integer> getAllDirections(){
         return Arrays.asList(
                 DIRECTION_FAR_LEFT,
                 DIRECTION_FAR_RIGHT,

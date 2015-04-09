@@ -177,7 +177,7 @@ public class SwipeActionTouchListener implements View.OnTouchListener {
      *
      * @param fadeOut true for a fade out, false for no fade out.
      */
-    protected void setFadeOut(boolean fadeOut){
+    public void setFadeOut(boolean fadeOut){
         mFadeOut = fadeOut;
     }
 
@@ -187,7 +187,7 @@ public class SwipeActionTouchListener implements View.OnTouchListener {
      *
      * @param fixedBackgrounds true for fixed backgrounds, false for swipe in
      */
-    protected void setFixedBackgrounds(boolean fixedBackgrounds){
+    public void setFixedBackgrounds(boolean fixedBackgrounds){
         mFixedBackgrounds = fixedBackgrounds;
     }
 
@@ -196,7 +196,7 @@ public class SwipeActionTouchListener implements View.OnTouchListener {
      *
      * @param farSwipeFraction float between 0 and 1
      */
-    protected void setFarSwipeFraction(float farSwipeFraction) {
+    public void setFarSwipeFraction(float farSwipeFraction) {
         mFarSwipeFraction = farSwipeFraction;
     }
 

@@ -22,30 +22,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ielts.dialer.MainActivity;
+import com.ielts.dialer.DialerHomeActivity;
 import com.ielts.dialer.R;
 import com.ielts.dialer.common.Common;
+import com.ielts.dialer.utils.PLog;
 
-public class ContactDetailsActivity extends Activity{
+public class ContactDetailsActivity extends Activity implements OnClickListener{
 	
 	final static String LOG_TAG = "Contact Details Activity";
 	private String contactName, contactNumber;
 	private TextView contactName_tv, contactnumber_tv, viewContact_tv;
 	private RelativeLayout callContact_rl, sendMessage_rl, viewContact_rl, clearAllCalls_rl, addComment_rl, scheduletask_rl,
 		editNumber_rl, share_rl, copy_rl, clearThisCall_rl;
-	private ImageView viewContact_iv;
 	private static String contactId = null;
-	Context context = null;
+	private Context context = null;
 	private long rawContactId = -1;
 	private String firstContactId = null;
 	ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
     int rawContactInsertIndex = ops.size();
-    String call_contact_id;
+    private String call_contact_id;
+    
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +54,11 @@ public class ContactDetailsActivity extends Activity{
 	 context=this;
 	
 	 InitializeUI();
+	 setListeners();
 	 
 	 contactName = getIntent().getExtras().getString("key_contact_name");
 	 contactNumber = getIntent().getStringExtra("key_contact_number");
 	 call_contact_id = getIntent().getStringExtra("key_contact_call_id");
-	 
-	 final ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
 	 
 	 if(null !=contactName){
 		 contactId = getContactRowIDLookupList(contactNumber, context);
@@ -80,178 +79,23 @@ public class ContactDetailsActivity extends Activity{
 	  */
 	 setContactNameNumber(contactName, contactNumber);
 	 
-	 callContact_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
-			Intent callIntent = new Intent(Intent.ACTION_CALL);
-		    callIntent.setData(Uri.parse("tel:" + contactNumber));
-		    startActivity(callIntent);
-		    finish();
-		}
-	});
-	 
-	 sendMessage_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
-			smsIntent.addCategory(Intent.CATEGORY_DEFAULT);
-			smsIntent.setType("vnd.android-dir/mms-sms");
-			smsIntent.setData(Uri.parse("sms:" + contactNumber)); 
-			startActivity(smsIntent);
-			finish();
-		}
-	});
-	 
-	 viewContact_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
-			if(contactName == null){
-				
-				Intent i = new Intent();     
-				i.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
-				i.setData(Uri.fromParts("tel", contactNumber, null)); 
-				startActivity(i);
-				ContactDetailsActivity.this.finish();
-			}else{
-				StringTokenizer tokens = new StringTokenizer(contactId, ",");
-				String firstContactId = tokens.nextToken();
-				//String second = tokens.nextToken();
-				Intent intent = new Intent(Intent.ACTION_VIEW);
-				Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(firstContactId));
-				intent.setData(uri);
-				context.startActivity(intent);
-				ContactDetailsActivity.this.finish();
-			}
-			
-			
-		}
-	});
-	 
-	 editNumber_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			Intent editNumIntent = new Intent(ContactDetailsActivity.this, MainActivity.class).putExtra("edit_contact", contactNumber);
-			startActivity(editNumIntent);
-			finish();
-		}
-	});
-	 
-	 share_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
-			Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-			sharingIntent.setType("text/html");
-			//sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("<p>This is the text that will be shared.</p>"));
-			sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, contactName +"\n" +contactNumber );
-			startActivity(Intent.createChooser(sharingIntent,"Share contact"));
-			finish();
-		}
-	});
-	 
-	 copy_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			if(null != contactName && null != contactNumber){
-				
-				Common.clipDataValue = contactName +"\n" +contactNumber;
-				ClipData clip = ClipData.newPlainText("copied", Common.clipDataValue);
-				clipboard.setPrimaryClip(clip);
-				Toast.makeText(getApplicationContext(), "Contact copied", Toast.LENGTH_LONG).show();
-				finish();
-			}if(contactName == null){
-				Common.clipDataValue = contactNumber;
-				ClipData clip = ClipData.newPlainText("copied", Common.clipDataValue);
-				clipboard.setPrimaryClip(clip);
-				Toast.makeText(getApplicationContext(), "Number copied", Toast.LENGTH_LONG).show();
-				finish();
-			}
-		}
-	});
-	 
-	 clearThisCall_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			try {
-				context.getContentResolver().delete( CallLog.Calls.CONTENT_URI, CallLog.Calls._ID + " = ? ", new String[] { String.valueOf(call_contact_id) });
-	            // int call_contact_id = 0; // I assume you have this id;
-	            //getContentResolver().delete(Uri.withAppendedPath(CallLog.Calls.CONTENT_URI, String.valueOf(call_contact_id)), "", null);
-	            finish();
-	           }catch (Exception ex) {
-	              System.out.print("Exception here ");
-	           }
-		}
-	});
-	 
-	 clearAllCalls_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			deleteAllEntriesFromLog(contactNumber);
-		}
-
-		/**
-		 * this method is used to delete the selected number from call log
-		 * @param contactNumber
-		 */
-		private void deleteAllEntriesFromLog(String contactNumber) {
-			// TODO Auto-generated method stub
-			try { 
-			    
-				Uri CALLLOG_URI = Uri.parse("content://call_log/calls"); 
-			    getApplicationContext().getContentResolver().delete(CALLLOG_URI,CallLog.Calls.NUMBER +"=?",new String[]{contactNumber});
-			    ContactDetailsActivity.this.finish();
-			    finish();
-			}catch(Exception e){ 
-				
-			    e.printStackTrace(); 
-			} 
-			
-		}
-	});
-	 
-	 addComment_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			addCommentDialog(rawContactId);
-			
-		}
-	});
-	 
-	 scheduletask_rl.setOnClickListener(new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
-			// TODO Auto-generated method stub
-			
-			Intent calendarIntent = new Intent(Intent.ACTION_EDIT);  
-			calendarIntent.setType("vnd.android.cursor.item/event");
-			startActivity(calendarIntent);
-			ContactDetailsActivity.this.finish();
-		}
-	});
 	 
 	}
 	
+	private void setListeners() {
+		// TODO Auto-generated method stub
+		callContact_rl.setOnClickListener(this);
+		sendMessage_rl.setOnClickListener(this);
+		viewContact_rl.setOnClickListener(this);
+		clearAllCalls_rl.setOnClickListener(this);
+		addComment_rl.setOnClickListener(this);
+		scheduletask_rl.setOnClickListener(this);
+		editNumber_rl.setOnClickListener(this);
+		share_rl.setOnClickListener(this);
+		copy_rl.setOnClickListener(this);
+		clearThisCall_rl.setOnClickListener(this);
+	}
+
 	@Override
 	 public void onResume(){
 	     super.onResume();
@@ -298,31 +142,6 @@ public class ContactDetailsActivity extends Activity{
 	  */
 	 public static String getContactRowIDLookupList(String contactNo, Context cxt) {
 		 
-//		 ContentResolver contentResolver = cxt.getContentResolver();
-//
-//		 Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(contactNo));
-//
-//		 String[] projection = new String[] {ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID};
-//
-//		 Cursor cursor =  
-//		    contentResolver.query(
-//		         uri, 
-//		         projection, 
-//		         null, 
-//		         null, 
-//		         null);
-//
-//		 if(cursor!=null) {
-//		   while(cursor.moveToNext()){
-//		     String contactName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup.DISPLAY_NAME));
-//		     String contactId = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
-//		     //Log.d(LOGTAG, "contactMatch name: " + contactName);
-//		     //Log.d(LOGTAG, "contactMatch id: " + contactId);
-//		   }
-//		   cursor.close();
-//		 }
-//		return contactId;
-
 	     String contactNumber = Uri.encode(contactNo);
 	     String contactIdList = new String();
 	     if (contactNumber != null) {
@@ -446,18 +265,185 @@ public class ContactDetailsActivity extends Activity{
 		contactName_tv = (TextView) findViewById(R.id.call_contact_name_tv);
 		contactnumber_tv = (TextView) findViewById(R.id.call_contact_num_tv);
 		viewContact_tv = (TextView) findViewById(R.id.view_contact_tv);
-		//viewContact_iv = (ImageView) findViewById(R.id.view_contact_imageView);
 		callContact_rl = (RelativeLayout) findViewById(R.id.contact_nameNum_relativeLayout);
 		sendMessage_rl = (RelativeLayout) findViewById(R.id.send_message_relativeLayout);
 		viewContact_rl = (RelativeLayout) findViewById(R.id.view_contact_relativeLayout);
 		clearAllCalls_rl = (RelativeLayout) findViewById(R.id.del_all_from_log_relativeLayout);
 		addComment_rl = (RelativeLayout) findViewById(R.id.add_comment_relativeLayout);
 		scheduletask_rl = (RelativeLayout) findViewById(R.id.schedule_task_relativeLayout);
-		scheduletask_rl = (RelativeLayout) findViewById(R.id.schedule_task_relativeLayout);
 		editNumber_rl = (RelativeLayout) findViewById(R.id.edit_contact_relativeLayout);
 		share_rl = (RelativeLayout) findViewById(R.id.share_contact_relativeLayout); 
 		copy_rl = (RelativeLayout) findViewById(R.id.copy_contact_relativeLayout); 
 		clearThisCall_rl = (RelativeLayout) findViewById(R.id.del_from_log_relativeLayout);;
 	}
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		
+		switch (v.getId()) {
+		
+			case R.id.contact_nameNum_relativeLayout:
+				try {
+					Intent callIntent = new Intent(Intent.ACTION_CALL);
+				    callIntent.setData(Uri.parse("tel:" + contactNumber));
+				    startActivity(callIntent);
+				    finish();
+				} catch (Exception e) {
+					PLog.e(LOG_TAG, e);
+				}
+			    
+				break;
+				
+			case R.id.send_message_relativeLayout:
+				try {
+					Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+					smsIntent.addCategory(Intent.CATEGORY_DEFAULT);
+					smsIntent.setType("vnd.android-dir/mms-sms");
+					smsIntent.setData(Uri.parse("sms:" + contactNumber)); 
+					startActivity(smsIntent);
+					finish();
+				} catch (Exception e) {
+					PLog.e(LOG_TAG, e);
+				}
+				
+				break;
+				
+			case R.id.view_contact_relativeLayout:
+				if(contactName == null){
+					try {
+						Intent i = new Intent();     
+						i.setAction(ContactsContract.Intents.SHOW_OR_CREATE_CONTACT);
+						i.setData(Uri.fromParts("tel", contactNumber, null)); 
+						startActivity(i);
+						ContactDetailsActivity.this.finish();
+					} catch (Exception e) {
+						PLog.e(LOG_TAG, e);
+					}
+				}else{
+					try {
+						StringTokenizer tokens = new StringTokenizer(contactId, ",");
+						String firstContactId = tokens.nextToken();
+						//String second = tokens.nextToken();
+						Intent intent = new Intent(Intent.ACTION_VIEW);
+						Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(firstContactId));
+						intent.setData(uri);
+						context.startActivity(intent);
+						ContactDetailsActivity.this.finish();
+					} catch (Exception e) {
+						PLog.e(LOG_TAG, e);
+					}
+				}
+				
+				break;
+				
+			case R.id.del_all_from_log_relativeLayout:
+				
+				deleteAllEntriesFromLog(contactNumber);
+				
+				break;
+				
+			case R.id.add_comment_relativeLayout:
+				
+				addCommentDialog(rawContactId);
+				
+				break;
+				
+			case R.id.schedule_task_relativeLayout:
+				try {
+					Intent calendarIntent = new Intent(Intent.ACTION_EDIT);  
+					calendarIntent.setType("vnd.android.cursor.item/event");
+					startActivity(calendarIntent);
+					ContactDetailsActivity.this.finish();
+				} catch (Exception e) {
+					PLog.e(LOG_TAG, e);
+				}
+				break;
+				
+			case R.id.edit_contact_relativeLayout:
+				try {
+					Intent editNumIntent = new Intent(ContactDetailsActivity.this, DialerHomeActivity.class).putExtra("edit_contact", contactNumber);
+					startActivity(editNumIntent);
+					finish();
+				} catch (Exception e) {
+					PLog.e(LOG_TAG, e);
+				}
+				break;
+				
+			case R.id.share_contact_relativeLayout:
+				try {
+					Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+					sharingIntent.setType("text/html");
+					//sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml("<p>This is the text that will be shared.</p>"));
+					sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, contactName +"\n" +contactNumber );
+					startActivity(Intent.createChooser(sharingIntent,"Share contact"));
+					finish();
+				} catch (Exception e) {
+					PLog.e(LOG_TAG, e);
+				}
+				break;
+				
+			case R.id.copy_contact_relativeLayout:
+				
+				 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+				
+				if(null != contactName && null != contactNumber){
+					try {
+						Common.clipDataValue = contactName +"\n" +contactNumber;
+						ClipData clip = ClipData.newPlainText("copied", Common.clipDataValue);
+						clipboard.setPrimaryClip(clip);
+						Toast.makeText(getApplicationContext(), "Contact copied", Toast.LENGTH_LONG).show();
+						finish();
+					} catch (Exception e) {
+						PLog.e(LOG_TAG, e);
+					}
+				}if(contactName == null){
+					try {
+						Common.clipDataValue = contactNumber;
+						ClipData clip = ClipData.newPlainText("copied", Common.clipDataValue);
+						clipboard.setPrimaryClip(clip);
+						Toast.makeText(getApplicationContext(), "Number copied", Toast.LENGTH_LONG).show();
+						finish();
+					} catch (Exception e) {
+						PLog.e(LOG_TAG, e);
+					}
+				}
+				
+				break;
+				
+			case R.id.del_from_log_relativeLayout:
+				
+				try {
+					context.getContentResolver().delete( CallLog.Calls.CONTENT_URI, CallLog.Calls._ID + " = ? ", new String[] { String.valueOf(call_contact_id) });
+		            // int call_contact_id = 0; // I assume you have this id;
+		            //getContentResolver().delete(Uri.withAppendedPath(CallLog.Calls.CONTENT_URI, String.valueOf(call_contact_id)), "", null);
+		            finish();
+		        }catch (Exception e) {
+		        	PLog.e(LOG_TAG, e);
+		        }
+				
+				break;
+			
+		}
+	}
+
+	/**
+	 * this method is used to delete the selected number from call log
+	 * @param contactNumber
+	 */
+	private void deleteAllEntriesFromLog(String contactNumber) {
+		// TODO Auto-generated method stub
+		try { 
+		    
+			Uri CALLLOG_URI = Uri.parse("content://call_log/calls"); 
+		    getApplicationContext().getContentResolver().delete(CALLLOG_URI,CallLog.Calls.NUMBER +"=?",new String[]{contactNumber});
+		    ContactDetailsActivity.this.finish();
+		    finish();
+		}catch(Exception e){ 
+			PLog.e(LOG_TAG, e);
+		} 
+		
+	}
+
 
 }
