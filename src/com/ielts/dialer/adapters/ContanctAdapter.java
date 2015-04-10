@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.andraskindler.quickscroll.Scrollable;
 import com.ielts.dialer.R;
-import com.ielts.dialer.contacts.ContactBean;
+import com.ielts.dialer.model.ContactBean;
 
 public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scrollable{
 	

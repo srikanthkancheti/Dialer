@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ielts.dialer.R;
-import com.ielts.dialer.contactdetails.ContactDetailsActivity;
+import com.ielts.dialer.activities.ContactDetailsActivity;
 import com.ielts.dialer.model.CallHistoryData;
 
 public class CallHistoryCustomAdapter extends BaseAdapter{

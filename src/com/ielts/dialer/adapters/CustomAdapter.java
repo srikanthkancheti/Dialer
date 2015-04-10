@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -14,14 +13,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ielts.dialer.R;
-import com.ielts.dialer.R.drawable;
-import com.ielts.dialer.R.id;
-import com.ielts.dialer.contactdetails.ContactDetailsActivity;
+import com.ielts.dialer.activities.ContactDetailsActivity;
 import com.ielts.dialer.model.CallData;
 
 /**
@@ -30,7 +28,7 @@ import com.ielts.dialer.model.CallData;
  * @author Srikanth
  *
  */
-public class CustomAdapter extends ArrayAdapter<CallData> {
+public class CustomAdapter extends ArrayAdapter<CallData> implements Filterable{
 	 
 	 //String _heading, _comm;
 	 private Activity activity;
@@ -54,6 +52,7 @@ public class CustomAdapter extends ArrayAdapter<CallData> {
 	  
 	public void filter(String charText) {
 		// TODO Auto-generated method stub
+		
 		charText = charText.toLowerCase(Locale.getDefault());
 		listdata.clear();
        if (charText.length() == 0) {
@@ -64,9 +63,115 @@ public class CustomAdapter extends ArrayAdapter<CallData> {
        	
            for (CallData ob : arraylist) {
            	
-               if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)){
-               	
-               	listdata.add(ob);
+//               if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)){
+//               	
+//               	listdata.add(ob);
+//               }
+        	   if(charText.contains("1")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+        	   
+        	   if(charText.contains("2")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("a") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("b")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("c")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+        	   
+        	   if(charText.contains("3")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("d") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("e")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("f")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+        	   
+        	   if(charText.contains("4")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("g") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("h")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("i")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+        	   
+        	   if(charText.contains("5")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("j") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("k")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("l")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+        	   
+        	   if(charText.contains("6")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("m") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("n")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("o")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+
+               if(charText.contains("7")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("p") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("q")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("r")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("s")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+               
+               if(charText.contains("8")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("t") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("u")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("v")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
+               }
+               
+               if(charText.contains("9")){
+            	   
+            	   if (ob.getCallnumber().toLowerCase(Locale.getDefault()).contains(charText)
+               			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("w") 
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("x")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("y")
+            			   || ob.getContactName().toLowerCase(Locale.getDefault()).contains("z")){
+            		   
+            		   listdata.add(ob);
+            	   }
+            	   
                }
            }
        }
@@ -92,9 +197,7 @@ public class CustomAdapter extends ArrayAdapter<CallData> {
 	   holder.calltype = (ImageView) convertView.findViewById(R.id.call_logo_imageView);
 	   holder.callnumber = (TextView) convertView.findViewById(R.id.callNumber_tv); 		   
 	   holder.calldate = (TextView) convertView.findViewById(R.id.callDate_tv);
-	  // holder.callduration = (TextView) convertView.findViewById(R.id.callDuration_tv);
 	   //holder.heading = (TextView) convertView.findViewById(R.id.heading_tv);
-	   //holder.addImage = (ImageView) convertView.findViewById(R.id.add_comment_imageView);
 	   holder.contactOptions_rl = (RelativeLayout) convertView.findViewById(R.id.options_rv);
 	   holder.numRelLayout = (RelativeLayout) convertView.findViewById(R.id.number_rl);
 	   holder.optionsImage = (ImageView) convertView.findViewById(R.id.option_imageView);
