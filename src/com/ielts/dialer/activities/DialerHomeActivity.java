@@ -35,9 +35,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ielts.dialer.R;
-import com.ielts.dialer.R.drawable;
-import com.ielts.dialer.R.id;
-import com.ielts.dialer.R.layout;
 import com.ielts.dialer.adapters.CustomAdapter;
 import com.ielts.dialer.adapters.CustomGridAdapter;
 import com.ielts.dialer.adapters.SwipeActionAdapter;
