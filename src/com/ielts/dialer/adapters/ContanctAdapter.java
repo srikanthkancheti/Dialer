@@ -5,7 +5,13 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.PhoneLookup;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,9 +80,80 @@ public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scroll
 		String firstLetter = contactName.substring(0, 1);
 		holder.contact_iv_tv.setText(firstLetter);
 		
+		 Uri uri = getPhotoUri(Long.parseLong(fetchContactIdFromPhoneNumber(objBean.getPhoneNo())));
+
+        if (uri != null) {
+            holder.contact_iv.setImageURI(uri);
+            //holder.contact_iv_tv.setVisibility(View.GONE);
+        } else {
+            holder.contact_iv.setImageResource(R.drawable.round_transparent);
+        }
+
 		return convertView;
 	}
 	
+	private Uri getPhotoUri(long contactId) {
+		// TODO Auto-generated method stub
+		ContentResolver contentResolver = activity.getContentResolver();
+
+        try {
+            Cursor cursor = contentResolver
+                    .query(ContactsContract.Data.CONTENT_URI,
+                            null,
+                            ContactsContract.Data.CONTACT_ID
+                                    + "="
+                                    + contactId
+                                    + " AND "
+
+                                    + ContactsContract.Data.MIMETYPE
+                                    + "='"
+                                    + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE
+                                    + "'", null, null);
+
+            if (cursor != null) {
+                if (!cursor.moveToFirst()) {
+                    return null; // no photo
+                }
+            } else {
+                return null; // error in cursor process
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        Uri person = ContentUris.withAppendedId(
+                ContactsContract.Contacts.CONTENT_URI, contactId);
+        return Uri.withAppendedPath(person,
+                ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+	}
+
+	private String fetchContactIdFromPhoneNumber(String phoneNo) {
+		// TODO Auto-generated method stub
+		Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
+                Uri.encode(phoneNo));
+        Cursor cFetch = activity.getContentResolver().query(uri,
+                new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup._ID },
+                null, null, null);
+
+        String contactId = "";
+
+
+        if (cFetch.moveToFirst()) {
+
+            cFetch.moveToFirst();
+
+                contactId = cFetch.getString(cFetch
+                        .getColumnIndex(PhoneLookup._ID));
+
+        }
+
+        System.out.println(contactId);
+
+        return contactId;       
+	}
+
 	public void setEditMode(boolean isEdit) {
 		this.isEdit = isEdit;
 	}
