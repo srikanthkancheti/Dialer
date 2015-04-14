@@ -451,7 +451,7 @@ public class DialerHomeActivity extends Activity implements SwipeActionAdapter.S
 	@Override
 	public void onSwipe(int[] positionList, int[] directionList) {
 		// TODO Auto-generated method stub
-		try{
+		
 			for(int i=0;i<positionList.length;i++) {
 	            int direction = directionList[i];
 	            int position = positionList[i];
@@ -486,36 +486,29 @@ public class DialerHomeActivity extends Activity implements SwipeActionAdapter.S
 	            mAdapter.notifyDataSetChanged();
 	        }
 			
-		}catch(Exception e){ 
-			Log.i(TAG, e.getMessage());
-		} 
+		
 		
 	}
 
 	private void callContactHistory(String callnumber, String contactName) {
 		// TODO Auto-generated method stub
-		try{
+		
 			Intent callContactHistoryIntent = new Intent(DialerHomeActivity.this, ContactCallHistoryActivity.class);
 			callContactHistoryIntent.putExtra("history_contact_number", callnumber);
 			callContactHistoryIntent.putExtra("history_contact_name", contactName);
 			startActivity(callContactHistoryIntent);
-		}catch(Exception e){ 
-			Log.i(TAG, e.getMessage());
-		} 
 		
 	}
 
 	private void sendMessageToSwipedItem(String callnumber) {
 		// TODO Auto-generated method stub
-		try{
+
 			Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
 			smsIntent.addCategory(Intent.CATEGORY_DEFAULT);
 			smsIntent.setType("vnd.android-dir/mms-sms");
 			smsIntent.setData(Uri.parse("sms:" + callnumber)); 
 			startActivity(smsIntent);
-		}catch(Exception e){ 
-			Log.i(TAG, e.getMessage());
-		} 
+
 	}
 
 
@@ -525,7 +518,7 @@ public class DialerHomeActivity extends Activity implements SwipeActionAdapter.S
 		switch (v.getId()) {
 		
 		case R.id.dial_close_rl:
-			try{
+		
 				// dont forget to put android:animateLayoutChanges="true" in your xml container layout
 				if (gridView.getVisibility() == View.VISIBLE) {
 								
@@ -537,26 +530,21 @@ public class DialerHomeActivity extends Activity implements SwipeActionAdapter.S
 		       	  	gridView.setVisibility(View.VISIBLE);
 		       	  	dialPad_collapse_iv.setImageResource(R.drawable.ic_action_expand);
 		         }
-			}catch(Exception e){ 
-				String msg = (e.getMessage()==null)?"exception message null!":e.getMessage();
-				Log.i(TAG,msg);
-			} 
+
 			break;
 			
 		case R.id.backspace_imageView:
-			try{
+			
 				if(0 != phone_num_edt.getText().length()){
 					// To delete the last character in edittext
 					phone_num_edt.getText().delete(phone_num_edt.getText().length() - 1,
 							phone_num_edt.getText().length());
 				}
-			}catch(Exception e){ 
-				Log.i(TAG, e.getMessage());
-			} 
+		
 			break;
 			
 		case R.id.home_call_rl:
-			try{
+			
 				if(phone_num_edt.getText().length() != 0){
 					Intent callIntent = new Intent(Intent.ACTION_CALL);
 				    callIntent.setData(Uri.parse("tel:" + phone_num_edt.getText().toString()));
@@ -565,18 +553,14 @@ public class DialerHomeActivity extends Activity implements SwipeActionAdapter.S
 					phone_num_edt.setText(Common.calloglist.get(0).getCallnumber());
 					phone_num_edt.setSelection(phone_num_edt.getText().length());
 				}
-			}catch(Exception e){ 
-				Log.i(TAG, e.getMessage());
-			} 
+			
 			break;
 			
 		case R.id.dial_person_rl:
-			try{
+			
 				Intent contactsIntent = new Intent(DialerHomeActivity.this, ContactsListActivity.class);
 				startActivity(contactsIntent);
-			}catch(Exception e){ 
-				Log.i(TAG, e.getMessage());
-			} 
+			
 			break;
 						
 		}

@@ -43,36 +43,15 @@ public class ContactsListActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contacts_list);
 		context = this;
-		
-		contact_listview = (ListView) findViewById(R.id.select_contacts_listView);
-		
-		Cursor phones = getContentResolver().query(
-				ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,
-				null, null);
-		while (phones.moveToNext()) {
-
-			String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-
-			String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-			ContactBean objContact = new ContactBean();
-			objContact.setName(name);
-			objContact.setPhoneNo(phoneNumber);
-			list.add(objContact);
-		}
-		phones.close();
-		//Astat.contactCheckArray = new boolean[list.size()];
-		objAdapter = new ContanctAdapter(ContactsListActivity.this, R.layout.contacts_list_item, list);
-		contact_listview.setAdapter(objAdapter);
+		InitializeUi();
+		LoadContacts();
 		
 		final QuickScroll quickscroll = (QuickScroll)findViewById(R.id.quickscroll);
 		quickscroll.init(QuickScroll.TYPE_INDICATOR_WITH_HANDLE, contact_listview, objAdapter, QuickScroll.STYLE_HOLO);
 		quickscroll.setFixedSize(1);
 		quickscroll.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 48);
 		
-		//objAdapter.setEditMode(true);
 		objAdapter.notifyDataSetChanged();
-		//UpdateAB = true;
 		invalidateOptionsMenu();
 
 		if (null != list && list.size() != 0) {
@@ -125,6 +104,34 @@ public class ContactsListActivity extends ActionBarActivity {
 
 	}
 	
+	private void LoadContacts() {
+		// TODO Auto-generated method stub
+		
+		Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null,null, null);
+		
+		while (phones.moveToNext()) {
+
+			String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+			String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+			ContactBean objContact = new ContactBean();
+			objContact.setName(name);
+			objContact.setPhoneNo(phoneNumber);
+			list.add(objContact);
+		}
+		phones.close();
+		//Astat.contactCheckArray = new boolean[list.size()];
+		objAdapter = new ContanctAdapter(ContactsListActivity.this, R.layout.contacts_list_item, list);
+		contact_listview.setAdapter(objAdapter);
+		
+	}
+
+	private void InitializeUi() {
+		// TODO Auto-generated method stub
+		contact_listview = (ListView) findViewById(R.id.select_contacts_listView);
+	}
+
 	protected String getContactRowIDLookupList(String phoneNumber,
 			ContactsListActivity cxt) {
 		// TODO Auto-generated method stub

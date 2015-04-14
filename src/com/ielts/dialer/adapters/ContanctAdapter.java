@@ -3,12 +3,14 @@ package com.ielts.dialer.adapters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
@@ -30,9 +32,9 @@ public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scroll
 	private List<ContactBean> items;
 	private int row;
 	private ContactBean objBean;
-	private boolean isEdit;
 	private ArrayList<ContactBean> arraylist;
-
+	int randomAndroidColor;
+	
 	public ContanctAdapter(Activity act, int row, List<ContactBean> items) {
 		super(act, row, items);
 
@@ -41,11 +43,14 @@ public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scroll
 		this.items = items;
 		this.arraylist = new ArrayList<ContactBean>();
         this.arraylist.addAll(items);
+//        int[] androidColors = act.getResources().getIntArray(R.array.imagecolors);
+//    	randomAndroidColor = androidColors[new Random().nextInt(androidColors.length)];
 	}
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = convertView == null ? new ViewHolder(): (ViewHolder) convertView.getTag();
+		
 		if (convertView == null) {
 			LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			convertView = inflater.inflate(row, null);
@@ -84,9 +89,12 @@ public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scroll
 
         if (uri != null) {
             holder.contact_iv.setImageURI(uri);
-            //holder.contact_iv_tv.setVisibility(View.GONE);
-        } else {
-            holder.contact_iv.setImageResource(R.drawable.round_transparent);
+            holder.contact_iv_tv.setVisibility(View.GONE);
+        }else{
+        	holder.contact_iv_tv.setVisibility(View.VISIBLE);
+        	Random rnd = new Random(); 
+        	int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)); 
+        	holder.contact_iv.setBackgroundColor(color);
         }
 
 		return convertView;
@@ -104,7 +112,6 @@ public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scroll
                                     + "="
                                     + contactId
                                     + " AND "
-
                                     + ContactsContract.Data.MIMETYPE
                                     + "='"
                                     + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE
@@ -154,9 +161,6 @@ public class ContanctAdapter extends ArrayAdapter<ContactBean> implements Scroll
         return contactId;       
 	}
 
-	public void setEditMode(boolean isEdit) {
-		this.isEdit = isEdit;
-	}
 
 	public class ViewHolder {
 		public TextView tvname, tvPhoneNo, contact_iv_tv;
